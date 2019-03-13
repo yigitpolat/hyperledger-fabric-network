@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gateway-ingress
+  annotations:
+    ingress.bluemix.net/redirect-to-https: "True"
+spec:
+  tls:
+  - hosts:
+    - ypyp-hyperledger-cluster.us-south.containers.appdomain.cloud
+    secretName: ypyp-hyperledger-cluster
+  rules:
+  - host: ypyp-hyperledger-cluster.us-south.containers.appdomain.cloud
+    http:
+      paths:
+      - path: /api
+        backend:
+          serviceName: rest-api
+          servicePort: 3000

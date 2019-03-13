@@ -1,0 +1,6 @@
+# kubectl expose deployment blockchain-explorer-app  --type=LoadBalancer --name=explorer-loadbalancer --port=80 --target-port=8080
+
+
+#peer chaincode invoke -o orderer:31010 -C channel1 -n cc  --peerAddresses org1peer2:30110 --peerAddresses org2peer2:30210 --peerAddresses org3peer2:30310 --peerAddresses org4peer2:30410 -c '{"Args":["changeCarOwner","1","zeynep"]}'
+
+

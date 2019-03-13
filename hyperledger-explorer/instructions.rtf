@@ -1,0 +1,14 @@
+kubectl apply -f copyExplorerConfigs.yaml
+pod=$(kubectl get pods --selector=job-name=copyexplorerconfigs --output=jsonpath={.items..metadata.name})
+kubectl cp explorer $pod:/shared/
+
+kubectl exec -it "hyperledger-exlorer-db-deployment.yaml" sh:
+
+su - postgres
+cd ../../../shared/explorer
+export USER=hppoc
+export DATABASE=fabricexplorer
+export PASSWORD=password
+psql -v dbname=$DATABASE -v user=$USER -v passwd=$PASSWORD -f ./explorerpg.sql;
+psql -v dbname=$DATABASE -v user=$USER -v passwd=$PASSWORD -f ./updatepg.sql;
+

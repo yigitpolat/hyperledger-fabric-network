@@ -1,0 +1,47 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hyperledger-explorer-db
+spec:
+  type: ClusterIP 
+  selector:
+    app: hyperledger-explorer-db
+  ports:
+  - protocol: TCP
+    port: 5432
+    targetPort: 5432 
+    name: pgsql
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hyperledger-explorer-db
+  labels: 
+    app: hyperledger-explorer-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hyperledger-explorer-db
+  template:
+    metadata:
+      labels:
+        app: hyperledger-explorer-db
+    spec:
+      volumes:
+      - name: myvolume
+        persistentVolumeClaim:
+          claimName: filepvc
+
+      containers:
+      - name: postgres
+        image: postgres:10.4-alpine
+        env:
+        - name: TZ
+          value: "Europe/Istanbul"
+        volumeMounts:
+        - mountPath: /shared
+          name: myvolume
+        ports:
+        - containerPort: 5432
